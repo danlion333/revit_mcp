@@ -1,0 +1,14 @@
+{
+  "builtin": "False",
+  "default_enabled": "True",
+  "type": "extension",
+  "rocket_mode_compatible": "True",
+  "name": "RevitMCP",
+  "description": "Bridge that lets an MCP server (Claude, Cursor, ...) read and modify the open Revit model",
+  "author": "Danylo Vyslotskyi",
+  "author_profile": "https://github.com/danlion333",
+  "url": "https://github.com/danlion333/revit_mcp.git",
+  "website": "https://github.com/danlion333/revit_mcp",
+  "image": "",
+  "dependencies": []
+}
