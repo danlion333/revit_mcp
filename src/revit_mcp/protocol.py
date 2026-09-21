@@ -11,7 +11,11 @@ Format: newline-delimited JSON over TCP, one object per line, UTF-8.
 
 Request::
 
-    {"v": 1, "id": "<opaque>", "method": "get_element", "params": {"element_id": 1234}}
+    {"v": 1, "id": "<opaque>", "method": "get_element", "params": {"element_id": 1234}, "timeout": 60}
+
+``timeout`` (seconds, optional) tells the bridge how long the client will
+wait, so the bridge can give up just before the client does and answer with
+a ``busy`` error instead of leaving a socket to time out.
 
 Success::
 
@@ -58,11 +62,14 @@ class Request:
     params: dict[str, Any] = field(default_factory=dict)
     id: str = field(default_factory=lambda: uuid.uuid4().hex)
     v: int = PROTOCOL_VERSION
+    timeout: float | None = None
 
     def encode(self) -> bytes:
         """One line, newline-terminated, ready for the socket."""
-        payload = {"v": self.v, "id": self.id, "method": self.method, "params": self.params}
-        return (json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8")
+        payload: dict[str, Any] = {"v": self.v, "id": self.id, "method": self.method, "params": self.params}
+        if self.timeout is not None:
+            payload["timeout"] = self.timeout
+        return (json.dumps(payload, ensure_ascii=True, separators=(",", ":")) + "\n").encode("utf-8")
 
 
 @dataclass(frozen=True)

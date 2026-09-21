@@ -60,12 +60,13 @@ class RevitClient:
         Raises :class:`RevitConnectionError`, :class:`RevitTimeoutError`,
         :class:`ProtocolError` or :class:`BridgeError`.
         """
-        request = Request(method=method, params=dict(params or {}))
         timeout = self.settings.timeout if timeout is None else timeout
+        request = Request(method=method, params=dict(params or {}), timeout=timeout)
         log.debug("-> %s %s", method, request.params)
         raw = self._exchange(request.encode(), timeout)
         response = Response.decode(raw)
-        if response.id != request.id:
+        if response.id != request.id and not (response.id is None and not response.ok):
+            # A bridge that could not even parse the id answers with id null and an error.
             raise ProtocolError(f"response id {response.id!r} does not match request id {request.id!r}")
         if response.ok:
             log.debug("<- %s ok", method)

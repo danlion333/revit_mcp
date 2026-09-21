@@ -18,13 +18,19 @@ def test_request_is_one_json_line_with_version_and_id():
     assert isinstance(obj["id"], str) and obj["id"]
 
 
+def test_request_carries_client_timeout_only_when_given():
+    assert "timeout" not in json.loads(Request(method="ping").encode())
+    assert json.loads(Request(method="ping", timeout=12.5).encode())["timeout"] == 12.5
+
+
 def test_request_ids_are_unique():
     assert Request(method="ping").id != Request(method="ping").id
 
 
-def test_request_keeps_unicode_unescaped():
+def test_request_escapes_non_ascii_and_round_trips():
     raw = Request(method="set_parameter", params={"value": "Stahlbeton – Wand"}).encode()
-    assert "Stahlbeton – Wand".encode() in raw
+    assert raw.isascii()  # the IronPython side must never see raw non-ASCII bytes
+    assert json.loads(raw)["params"]["value"] == "Stahlbeton – Wand"
 
 
 def test_success_response_decodes_result():

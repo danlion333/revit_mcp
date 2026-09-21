@@ -87,6 +87,7 @@ async def test_arguments_reach_bridge_and_result_is_structured(scripted_bridge):
         "id": b.requests[-1]["id"],
         "method": "get_element",
         "params": {"element_id": 4242, "include_type_parameters": True},
+        "timeout": 5.0,
     }
 
 

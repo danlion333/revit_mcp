@@ -19,6 +19,7 @@ def test_call_round_trips_method_params_and_result(fake_bridge, client_for):
     assert out == {"echo": "get_element", "params": {"element_id": 7}}
     assert b.requests[0]["method"] == "get_element"
     assert b.requests[0]["v"] == 1
+    assert b.requests[0]["timeout"] == 5.0
 
 
 def test_bridge_error_is_raised_with_code_and_details(fake_bridge, client_for):
