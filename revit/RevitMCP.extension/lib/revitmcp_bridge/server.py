@@ -241,7 +241,8 @@ class Bridge(object):
                 return
             if not line.strip():
                 continue
-            self.requests_served += 1
+            with self.clients_lock:
+                self.requests_served += 1
             reply = self._handle_line(line)
             writer.WriteLine(reply)
             writer.Flush()

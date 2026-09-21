@@ -216,7 +216,6 @@ def hello(uiapp, params):
             "version_number": app.VersionNumber,
             "version_name": app.VersionName,
             "version_build": app.VersionBuild,
-            "username": app.Username,
         },
         "document": _document_info(uidoc.Document if uidoc is not None else None),
         "open_documents": [d.Title for d in app.Documents],
@@ -428,11 +427,14 @@ def delete_elements(uiapp, params):
     if not isinstance(raw_ids, (list, tuple)) or not raw_ids:
         raise CommandError("invalid_params", "element_ids must be a non-empty list of integers")
     ids = List[DB.ElementId]()
+    requested = []
     for raw in raw_ids:
-        ids.Add(get_element(doc, raw).Id)
-    with transaction(doc, "RevitMCP: delete %d element(s)" % len(raw_ids)):
+        element = get_element(doc, raw)
+        ids.Add(element.Id)
+        requested.append(element_id_value(element.Id))
+    with transaction(doc, "RevitMCP: delete %d element(s)" % len(requested)):
         deleted = doc.Delete(ids)
-    return {"requested_ids": [int(i) for i in raw_ids], "deleted_ids": sorted(element_id_value(i) for i in deleted)}
+    return {"requested_ids": requested, "deleted_ids": sorted(element_id_value(i) for i in deleted)}
 
 
 # ----------------------------------------------------------------------------- creation

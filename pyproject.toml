@@ -24,7 +24,7 @@ Issues = "https://github.com/danlion333/revit_mcp/issues"
 [project.scripts]
 revit-mcp = "revit_mcp.server:main"
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.5"]
 
 [build-system]

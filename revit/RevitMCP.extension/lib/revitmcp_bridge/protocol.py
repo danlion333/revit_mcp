@@ -66,18 +66,74 @@ def parse_request(line):
     return Request(request_id, method, params, timeout)
 
 
-# ensure_ascii=True on purpose: IronPython 2.7's json encoder mixes str and
-# unicode fragments when asked for raw non-ASCII output and can raise
-# UnicodeDecodeError on a model with accented or Cyrillic names. \uXXXX
-# escapes are decoded losslessly on the CPython side.
+# Output is written by a small encoder of our own rather than json.dumps.
+# IronPython 2.7's json encoder treats every str as a byte string and calls
+# .decode("utf-8") on any that contains a character in U+0080..U+00FF, which
+# raises on a model with a view called "Élévation". Escaping everything
+# non-ASCII as \uXXXX here is lossless for the CPython side and sidesteps
+# the whole str/unicode question in the host runtime.
+
+try:
+    long
+except NameError:  # pragma: no cover - IronPython 3
+    long = int  # noqa: A001
+try:
+    unicode
+except NameError:  # pragma: no cover - IronPython 3
+    unicode = str  # noqa: A001
+
+_ESCAPES = {u'"': u'\\"', u"\\": u"\\\\", u"\n": u"\\n", u"\r": u"\\r", u"\t": u"\\t", u"\b": u"\\b", u"\f": u"\\f"}
+
+
+def _encode_string(value):
+    out = [u'"']
+    for ch in value:
+        code = ord(ch)
+        if ch in _ESCAPES:
+            out.append(_ESCAPES[ch])
+        elif code > 0xFFFF:
+            # CPython gives whole code points; .NET strings already come as UTF-16 units.
+            code -= 0x10000
+            out.append(u"\\u%04x\\u%04x" % (0xD800 + (code >> 10), 0xDC00 + (code & 0x3FF)))
+        elif code < 0x20 or code > 0x7E:
+            out.append(u"\\u%04x" % code)
+        else:
+            out.append(ch)
+    out.append(u'"')
+    return u"".join(out)
+
+
+def dumps(value):
+    """JSON text (ASCII only) for None, bool, int, long, float, str, list/tuple, dict."""
+    if value is None:
+        return u"null"
+    if value is True:
+        return u"true"
+    if value is False:
+        return u"false"
+    if isinstance(value, (int, long)):
+        return unicode(value)
+    if isinstance(value, float):
+        if value != value or value in (float("inf"), float("-inf")):
+            return u"null"  # JSON has no NaN/Infinity
+        return unicode(repr(value))
+    if isinstance(value, basestring):  # noqa: F821
+        return _encode_string(value)
+    if isinstance(value, (list, tuple)):
+        return u"[" + u",".join(dumps(v) for v in value) + u"]"
+    if isinstance(value, dict):
+        items = []
+        for key, item in value.items():
+            if not isinstance(key, basestring):  # noqa: F821
+                key = unicode(key)
+            items.append(_encode_string(key) + u":" + dumps(item))
+        return u"{" + u",".join(items) + u"}"
+    raise TypeError("cannot encode %s as JSON" % type(value).__name__)
 
 
 def encode_ok(request_id, result):
-    return json.dumps({"id": request_id, "ok": True, "result": result}, ensure_ascii=True)
+    return dumps({"id": request_id, "ok": True, "result": result})
 
 
 def encode_error(request_id, code, message, details=None):
-    return json.dumps(
-        {"id": request_id, "ok": False, "error": {"code": code, "message": message, "details": details}},
-        ensure_ascii=True,
-    )
+    return dumps({"id": request_id, "ok": False, "error": {"code": code, "message": message, "details": details}})
