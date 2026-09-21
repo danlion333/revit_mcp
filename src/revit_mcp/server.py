@@ -263,9 +263,12 @@ def execute_python(code: str, transaction: bool = True, timeout_seconds: float =
     Pre-bound names: `doc` (Document), `uidoc`, `app` (Application), `uiapp`,
     `DB` (Autodesk.Revit.DB), `UI` (Autodesk.Revit.UI), `clr`, and
     `FilteredElementCollector`, `Transaction`, `ElementId`, `XYZ`,
-    `BuiltInCategory`, `BuiltInParameter` for convenience. Assign to `result`
-    to return a value (ElementIds, XYZs, .NET lists and Elements are converted
-    to JSON); anything printed comes back as `stdout`.
+    `BuiltInCategory`, `BuiltInParameter` for convenience. `ElementId(n)`
+    accepts a plain int (a wrapper resolves IronPython's overload ambiguity;
+    use `DB.ElementId` for isinstance checks). Assign to `result` to return a
+    value (ElementIds, XYZs, .NET lists and Elements are converted to JSON);
+    anything printed comes back as `stdout`. Never open a TaskDialog or other
+    modal UI: it blocks Revit's UI thread and every later call.
 
     With `transaction=true` (default) the code runs inside one Revit
     transaction that is committed on success and rolled back if the code

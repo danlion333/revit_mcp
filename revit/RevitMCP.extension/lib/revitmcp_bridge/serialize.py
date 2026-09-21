@@ -7,6 +7,8 @@ import clr
 from Autodesk.Revit import DB
 
 clr.AddReference("RevitAPI")
+clr.AddReference("System")
+from System import Int32, Int64  # noqa: E402
 
 try:
     basestring
@@ -26,6 +28,20 @@ def element_id_value(element_id):
     if value is None:
         value = element_id.IntegerValue
     return int(value)
+
+
+def make_element_id(value):
+    """ElementId from a Python int.
+
+    Revit 2024+ has ElementId(Int64) next to the deprecated ElementId(Int32) and the
+    enum constructors; handed a bare Python int, IronPython's overload resolution
+    reports the call as ambiguous, so pick the overload explicitly.
+    """
+    number = int(value)
+    try:
+        return DB.ElementId(Int64(number))
+    except TypeError:  # Revit 2023 and older: no Int64 overload
+        return DB.ElementId(Int32(number))
 
 
 def xyz(point):
@@ -60,6 +76,12 @@ def to_jsonable(value, depth=0):
 def safe_name(element):
     try:
         return element.Name
+    except Exception:
+        pass
+    # ElementType (and a few others) redeclare Name, and IronPython reports the
+    # lookup as ambiguous; the base property getter still works.
+    try:
+        return DB.Element.Name.__get__(element)
     except Exception:
         return None
 

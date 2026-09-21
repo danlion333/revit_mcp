@@ -28,6 +28,7 @@ from .serialize import (  # noqa: E402
     element_details,
     element_id_value,
     element_summary,
+    make_element_id,
     parameter_info,
     safe_name,
     to_jsonable,
@@ -38,6 +39,10 @@ try:
     basestring
 except NameError:  # pragma: no cover
     basestring = str  # noqa: A001
+try:
+    long
+except NameError:  # pragma: no cover
+    long = int  # noqa: A001
 
 try:
     from StringIO import StringIO
@@ -107,8 +112,10 @@ def point(params, name):
 
 
 def get_element(doc, element_id, what="element", cls=None):
+    if isinstance(element_id, bool) or not isinstance(element_id, (int, long, basestring)):
+        raise CommandError("invalid_params", "%s id must be an integer, got %r" % (what, element_id))
     try:
-        eid = DB.ElementId(int(element_id))
+        eid = make_element_id(element_id)
     except (TypeError, ValueError):
         raise CommandError("invalid_params", "%s id must be an integer, got %r" % (what, element_id))
     element = doc.GetElement(eid)
@@ -377,7 +384,7 @@ def _coerce_and_set(param, value):
                 return param.SetValueString(value)
         return param.Set(int(value))
     if storage == DB.StorageType.ElementId:
-        return param.Set(DB.ElementId(int(value)))
+        return param.Set(make_element_id(value))
     raise CommandError("invalid_params", "parameter has no storage type and cannot be set")
 
 
@@ -574,6 +581,28 @@ def list_sheets(uiapp, params):
 # ----------------------------------------------------------------------------- escape hatch
 
 
+class _ElementIdFactory(object):
+    """What `ElementId` means inside execute_python code.
+
+    `DB.ElementId(123)` fails under IronPython with "Multiple targets could match:
+    ElementId(BuiltInParameter), ElementId(BuiltInCategory), ElementId(Int64)" because a
+    Python int fits all three. Model-written code says ElementId(n) constantly, so this
+    stand-in resolves ints explicitly and passes everything else (the enums) through.
+    Attributes such as ElementId.InvalidElementId come from the real class.
+    """
+
+    def __call__(self, value):
+        if isinstance(value, (int, long)) and not isinstance(value, bool):
+            return make_element_id(value)
+        return DB.ElementId(value)
+
+    def __getattr__(self, name):
+        return getattr(DB.ElementId, name)
+
+    def __repr__(self):
+        return "<ElementId factory; DB.ElementId is the real class>"
+
+
 @command("execute_python")
 def execute_python(uiapp, params):
     code = need(params, "code")
@@ -601,7 +630,8 @@ def execute_python(uiapp, params):
         "clr": clr,
         "FilteredElementCollector": DB.FilteredElementCollector,
         "Transaction": DB.Transaction,
-        "ElementId": DB.ElementId,
+        "ElementId": _ElementIdFactory(),
+        "element_id": make_element_id,
         "XYZ": DB.XYZ,
         "BuiltInCategory": DB.BuiltInCategory,
         "BuiltInParameter": DB.BuiltInParameter,
