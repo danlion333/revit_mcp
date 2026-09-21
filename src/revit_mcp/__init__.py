@@ -1,8 +1,9 @@
-"""
-Revit MCP - Autodesk Revit Model Context Protocol Integration
+"""revit-mcp: a Model Context Protocol server for Autodesk Revit.
 
-This package connects Autodesk Revit to Claude AI through the Model Context Protocol (MCP),
-allowing Claude to directly interact with and control Revit for architectural modeling tasks.
+Two halves: this package (CPython, runs next to the MCP client and speaks MCP
+over stdio) and a pyRevit extension (IronPython, runs inside Revit and executes
+Revit API calls on Revit's UI thread). They talk newline-delimited JSON over
+a loopback TCP socket; see :mod:`revit_mcp.protocol`.
 """
 
-__version__ = "0.1.0" 
+__version__ = "1.0.0"

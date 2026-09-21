@@ -1,47 +1,49 @@
 [project]
 name = "revit-mcp"
-version = "0.1.0"
-description = "Autodesk Revit integration for Claude AI via Model Context Protocol"
-authors = [
-    {name = "Your Name", email = "your.email@example.com"},
-]
-dependencies = [
-    "mcp-server-fastmcp>=0.0.2",
-]
-requires-python = ">=3.10"
+version = "1.0.0"
+description = "Model Context Protocol server that lets an LLM read and modify a live Autodesk Revit model"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Danylo Vyslotskyi" }]
+requires-python = ">=3.10"
+keywords = ["mcp", "model-context-protocol", "revit", "bim", "pyrevit", "autodesk", "claude"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = ["mcp>=2.0,<3"]
+
+[project.urls]
+Homepage = "https://github.com/danlion333/revit_mcp"
+Issues = "https://github.com/danlion333/revit_mcp/issues"
+
+[project.scripts]
+revit-mcp = "revit_mcp.server:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.5"]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[project.scripts]
-revit-mcp = "revit_mcp.main:main"
+[tool.hatch.build.targets.wheel]
+packages = ["src/revit_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = ["e2e: needs a live Revit with the bridge running; skipped unless REVIT_MCP_E2E=1"]
 
 [tool.ruff]
-line-length = 88
+line-length = 120
 target-version = "py310"
+src = ["src", "tests"]
+extend-exclude = ["revit/"]   # IronPython 2.7 code; ruff's py3 rules do not apply
 
 [tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "F",   # pyflakes
-    "I",   # isort
-]
-ignore = [
-    "E501",  # line too long, handled by formatter
-]
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"
-
-[tool.uv]
-dev-dependencies = [
-    "pytest~=7.0",
-    "pre-commit~=3.0",
-    "ruff~=0.1.0",
-] 
+select = ["E", "F", "I", "UP", "B"]
