@@ -247,7 +247,11 @@ Every run writes a JSON transcript of each tool call and its result to `docs/ver
 (override the path with `REVIT_MCP_E2E_REPORT`). `docs/verification/` holds the transcript from the
 author's own run against Revit 2026 in a Windows VM.
 
-<!-- VERIFICATION_EVIDENCE -->
+The committed evidence is from a run on 2026-09-21 against Autodesk Revit 2026 (build 26.5.0.55)
+with pyRevit 6.5.5 on the `Snowdon Towers Sample Architectural` sample model:
+[`docs/verification/README.md`](docs/verification/README.md) explains the three files there
+(the MCP-client transcript, the bridge's own log, and the relevant lines of Revit's journal,
+which records each ExternalEvent and each committed transaction by name).
 
 There are no mocked Revit tests, because a mocked Revit proves nothing.
 

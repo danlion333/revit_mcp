@@ -1,0 +1,36 @@
+2026-09-21T13:01:05.641000Z  bridge 1.0.0 listening on 127.0.0.1:9877 (protocol 1)
+2026-09-21T13:01:24.510000Z  timeout (7s) waiting for Revit to run 4c34f7716fcc4d3d993b2b53aa6bc0fe hello (started=False)
+2026-09-21T13:01:41.608000Z  timeout (7s) waiting for Revit to run f8c204b165ad4a8ab59c829aa8cdd9f6 hello (started=False)
+2026-09-21T13:01:48.906000Z  skip abandoned 4c34f7716fcc4d3d993b2b53aa6bc0fe hello
+2026-09-21T13:01:48.909000Z  skip abandoned f8c204b165ad4a8ab59c829aa8cdd9f6 hello
+2026-09-21T13:01:51.782000Z  hello ok
+2026-09-21T13:02:10.038000Z  hello ok
+2026-09-21T13:02:10.200000Z  get_project_info ok
+2026-09-21T13:02:10.277000Z  list_levels ok
+2026-09-21T13:02:13.090000Z  list_categories ok
+2026-09-21T13:02:13.228000Z  list_views ok
+2026-09-21T13:02:13.345000Z  list_sheets ok
+2026-09-21T13:02:13.482000Z  list_elements ok
+2026-09-21T13:02:13.700000Z  get_element ok
+2026-09-21T13:02:14.239000Z  set_parameter ok
+2026-09-21T13:02:14.250000Z  get_element ok
+2026-09-21T13:02:14.336000Z  set_parameter ok
+2026-09-21T13:02:14.463000Z  create_level ok
+2026-09-21T13:02:14.493000Z  list_levels ok
+2026-09-21T13:02:14.577000Z  list_elements ok
+2026-09-21T13:02:14.762000Z  create_wall ok
+2026-09-21T13:02:14.809000Z  list_elements ok
+2026-09-21T13:02:14.830000Z  get_element ok
+2026-09-21T13:02:15.010000Z  create_sheet ok
+2026-09-21T13:02:15.037000Z  list_sheets ok
+2026-09-21T13:02:15.585000Z  get_element ok
+2026-09-21T13:02:15.743000Z  execute_python ok
+2026-09-21T13:02:15.929000Z  execute_python -> revit_error: ValueError: boom
+2026-09-21T13:02:16.053000Z  delete_elements ok
+2026-09-21T13:02:16.098000Z  get_element -> not_found: no element with id 2661018 in Snowdon Towers Sample Architectural
+2026-09-21T13:02:16.141000Z  list_elements ok
+2026-09-21T13:02:16.157000Z  list_elements -> not_found: no category named 'Unicorns'; use list_categories to see the names this model accepts
+2026-09-21T13:02:16.169000Z  get_element -> not_found: no element with id 1 in Snowdon Towers Sample Architectural
+2026-09-21T13:02:16.191000Z  set_parameter -> invalid_params: parameter 'Area' is read-only on element 619340
+2026-09-21T13:02:16.592000Z  shutdown requested by client
+2026-09-21T13:02:16.666000Z  bridge stopped after 33 request(s)

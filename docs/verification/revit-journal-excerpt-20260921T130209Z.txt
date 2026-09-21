@@ -1,0 +1,22 @@
+journal: journal.0056.txt (2026-09-21T13:02:16.1894241Z)
+' Build: 20260731_1210(x64)
+'Bridge, class: revitmcp_revitmcp_bridge_start, assembly: C:\Users\<user>\AppData\Roaming\pyRevit\2026\pyRevit_2026_bc9a306c6b6b8db4_RevitMCP.dll, parentId: CustomCtrl_%RevitMCP%Bridge }
+'Status, class: revitmcp_revitmcp_bridge_status, assembly: C:\Users\<user>\AppData\Roaming\pyRevit\2026\pyRevit_2026_bc9a306c6b6b8db4_RevitMCP.dll, parentId: CustomCtrl_%RevitMCP%Bridge }
+'Bridge, class: revitmcp_revitmcp_bridge_stop, assembly: C:\Users\<user>\AppData\Roaming\pyRevit\2026\pyRevit_2026_bc9a306c6b6b8db4_RevitMCP.dll, parentId: CustomCtrl_%RevitMCP%Bridge }
+' 0:< TaskDialog "Hardware Acceleration disabled. Software emulation mode is in use."
+'Id : TaskDialog_Graphics_Options_Cannot_Use_Hardware_Acceleration
+  ' [Jrn.ExternalEventExecution] Rvt.Attr.AddInId: b39107c3-a1d7-47f4-a5a1-532ddf6edb5d Rvt.Attr.AddInName: PyRevitLoader Rvt.Attr.AddInVersion: 2.7.12.0 Rvt.Attr.ExternalEventName: RevitMCP bridge Rvt.Attr.VendorId: eir
+  ' [Jrn.ExternalEventExecution] Rvt.Attr.AddInId: cd9dc99f-2fee-47d7-bfd1-ec4c776b9325 Rvt.Attr.AddInName: Autodesk.Revit.CloudWorksharing.UI Rvt.Attr.AddInVersion: 26.5.0.55 Rvt.Attr.ExternalEventName: ExternalEventFin
+  ' [Jrn.ExternalEventExecution] Rvt.Attr.AddInId: b39107c3-a1d7-47f4-a5a1-532ddf6edb5d Rvt.Attr.AddInName: PyRevitLoader Rvt.Attr.AddInVersion: 2.7.12.0 Rvt.Attr.ExternalEventName: RevitMCP bridge Rvt.Attr.VendorId: eir
+        "Transaction Successful"  , "RevitMCP: set Comments"
+  ' [Jrn.ExternalEventExecution] Rvt.Attr.AddInId: b39107c3-a1d7-47f4-a5a1-532ddf6edb5d Rvt.Attr.AddInName: PyRevitLoader Rvt.Attr.AddInVersion: 2.7.12.0 Rvt.Attr.ExternalEventName: RevitMCP bridge Rvt.Attr.VendorId: eir
+        "Transaction Successful"  , "RevitMCP: set Comments"
+  ' [Jrn.ExternalEventExecution] Rvt.Attr.AddInId: b39107c3-a1d7-47f4-a5a1-532ddf6edb5d Rvt.Attr.AddInName: PyRevitLoader Rvt.Attr.AddInVersion: 2.7.12.0 Rvt.Attr.ExternalEventName: RevitMCP bridge Rvt.Attr.VendorId: eir
+        "Transaction Successful"  , "RevitMCP: create level MCP 20260921T130210Z"
+  ' [Jrn.ExternalEventExecution] Rvt.Attr.AddInId: b39107c3-a1d7-47f4-a5a1-532ddf6edb5d Rvt.Attr.AddInName: PyRevitLoader Rvt.Attr.AddInVersion: 2.7.12.0 Rvt.Attr.ExternalEventName: RevitMCP bridge Rvt.Attr.VendorId: eir
+        "Transaction Successful"  , "RevitMCP: create wall"
+  ' [Jrn.ExternalEventExecution] Rvt.Attr.AddInId: b39107c3-a1d7-47f4-a5a1-532ddf6edb5d Rvt.Attr.AddInName: PyRevitLoader Rvt.Attr.AddInVersion: 2.7.12.0 Rvt.Attr.ExternalEventName: RevitMCP bridge Rvt.Attr.VendorId: eir
+        "Transaction Successful"  , "RevitMCP: create sheet MCP-30210Z"
+  ' [Jrn.ExternalEventExecution] Rvt.Attr.AddInId: b39107c3-a1d7-47f4-a5a1-532ddf6edb5d Rvt.Attr.AddInName: PyRevitLoader Rvt.Attr.AddInVersion: 2.7.12.0 Rvt.Attr.ExternalEventName: RevitMCP bridge Rvt.Attr.VendorId: eir
+        "Transaction Successful"  , "RevitMCP: delete 3 element(s)"
+  ' [Jrn.ExternalEventExecution] Rvt.Attr.AddInId: b39107c3-a1d7-47f4-a5a1-532ddf6edb5d Rvt.Attr.AddInName: PyRevitLoader Rvt.Attr.AddInVersion: 2.7.12.0 Rvt.Attr.ExternalEventName: RevitMCP bridge Rvt.Attr.VendorId: eir
