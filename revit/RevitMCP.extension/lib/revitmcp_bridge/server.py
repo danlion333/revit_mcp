@@ -148,6 +148,7 @@ class Bridge(object):
         self.requests_served = 0
         self.clients = set()
         self.clients_lock = threading.Lock()
+        self.shutdown_pending = False
 
     # ------------------------------------------------------------------ lifecycle
 
@@ -246,6 +247,9 @@ class Bridge(object):
             reply = self._handle_line(line)
             writer.WriteLine(reply)
             writer.Flush()
+            if self.shutdown_pending:
+                self.stop()
+                return
             if not self.running:
                 return
 
@@ -269,8 +273,10 @@ class Bridge(object):
                 },
             )
         if method == "shutdown":
+            # Reply first, stop after: stop() closes every client socket, this one included,
+            # and the Stop button needs to see the acknowledgement.
             self.log("shutdown requested by client")
-            self.stop()
+            self.shutdown_pending = True
             return encode_ok(request_id, {"stopped": True})
 
         job = _Job(request_id, method, params)
